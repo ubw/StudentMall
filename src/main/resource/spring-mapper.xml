@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:utl="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		">
+
+
+    <context:component-scan base-package="com.cjwstorm.mapper"/>
+
+    <!--数据库配置文件-->
+    <utl:properties id="dbProperties" location="classpath:db.properties">
+    </utl:properties>
+
+    <!--连接池配置-->
+    <bean id="basicDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="#{dbProperties.driver}"/>
+        <property name="url" value="#{dbProperties.url}"/>
+        <property name="username" value="#{dbProperties.usrname}"/>
+        <property name="password" value="#{dbProperties.password}"/>
+        <property name="initialSize" value="#{dbProperties.initSize}"/>
+        <property name="maxActive" value="#{dbProperties.maxActive}"/>
+    </bean>
+
+    <!-- mybatis配置1 MapperScanner -->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 用于配置持久层接口在哪 -->
+        <property name="basePackage" value="com.cjwstorm.mapper"/>
+    </bean>
+
+    <!-- mybatis配置2 SQLSessionFactoryBean -->
+    <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="basicDataSource"/>
+        <property name="mapperLocations" value="classpath:mappers/*/*.xml"/>
+    </bean>
+
+    <!-- 注解驱动 ResponseBody添加 -->
+    <mvc:annotation-driven>
+    </mvc:annotation-driven>
+
+    <!--让TransactionManager工作起来,需要配置数据源即数据库-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="basicDataSource"/>
+    </bean>
+
+    <!--事务的注解驱动,不加后面的transaction也可-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+</beans>

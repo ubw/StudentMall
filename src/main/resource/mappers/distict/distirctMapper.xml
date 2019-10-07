@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.cjwstorm.mapper.DistrictMapper">
+    <!--因为要放到bean对象中去，所以如果名字不同的话，要用as 的方式使得名字和bean中的名字相同。-->
+    <select id="listProvinces" resultType="com.cjwstorm.bean.Province">
+    select id, province_code as code , province_name as name from t_dict_provinces
+    </select>
+
+    <select id="findCitiesByProvinceCode" resultType="com.cjwstorm.bean.City">
+        select id, province_code as provinceCode, city_code as cityCode, city_name  as cityName from t_dict_cities
+        where
+        province_code = #{provinceCode};
+    </select>
+
+    <select id="findAreasByCityCode" resultType="com.cjwstorm.bean.Area">
+        select id, city_code as cityCode, area_code as areaCode, area_name as areaName  from t_dict_areas
+        where
+        city_code = #{cityCode};
+    </select>
+
+    <select id="findAreaNameByCode" resultType="java.lang.String">
+        select area_name as areaName  from t_dict_areas
+        where
+        area_code = #{areaCode};
+    </select>
+
+    <select id="findCityNameByCode" resultType="java.lang.String">
+        select city_name  as cityName from t_dict_cities
+        where
+        city_code = #{cityCode};
+    </select>
+
+    <select id="findProvinceNameByCode" resultType="java.lang.String">
+        select  province_name as name from t_dict_provinces
+        where
+        province_code=#{code};
+    </select>
+</mapper>

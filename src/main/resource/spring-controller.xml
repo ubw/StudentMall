@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns:utl="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+
+    <context:component-scan base-package="com.cjwstorm.controller"/>
+
+    <!-- 配置ViewResolver 这个只需配一次都一样-->
+    <bean id="ViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix">
+            <value>/web/</value>
+        </property>
+        <property name="suffix">
+            <value>.jsp</value>
+        </property>
+    </bean>
+
+    <!-- 登陆的拦截器-->
+    <context:component-scan base-package="com.cjwstorm.interceptor"/>
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!-- 拦截范围 -->
+            <mvc:mapping path="/usr/*.do"/>
+            <mvc:mapping path="/address/*.do"/>
+            <mvc:mapping path="/cart/*.do"/>
+            <mvc:mapping path="/order/*.do"/>
+            <!-- 无视拦截器-->
+            <mvc:exclude-mapping path="/usr/login.do"/>
+            <mvc:exclude-mapping path="/usr/register.do"/>
+            <mvc:exclude-mapping path="/usr/handle_register.do"/>
+            <mvc:exclude-mapping path="/usr/handle_login.do"/>
+            <mvc:exclude-mapping path="/usr/checkUserName.do"/>
+            <mvc:exclude-mapping path="/usr/checkPhone.do"/>
+            <mvc:exclude-mapping path="/usr/checkEmail.do"/>
+            <mvc:exclude-mapping path="/usr/identifyCode.do"/>
+            <mvc:exclude-mapping path="/usr/checkIdentifyCode.do"/>
+            <bean class="com.cjwstorm.interceptor.LoginInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>

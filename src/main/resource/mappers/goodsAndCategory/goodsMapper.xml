@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.cjwstorm.mapper.GoodsMapper">
+    <select id="findGoodsListByCategoryId" resultType="com.cjwstorm.bean.Goods" >
+        select
+            id,
+            category_id as categoryId,
+            item_type as itemType,
+            title,
+            sell_point as sellPoint,
+            price,
+            num,
+            barcode,
+            image,
+            status,
+            priority
+        from
+            t_goods
+        where
+            category_id = #{categoryId}
+        <if test="orderField != null">
+        order by ${orderField}
+        </if>
+        limit #{offset}, #{count}
+    </select>
+
+    <select id="getCountsByCategoryId" resultType="java.lang.Integer">
+        select
+            count(id)
+        from
+            t_goods
+        where
+            category_id = #{categoryId}
+    </select>
+
+    <select id="findGoodsById" resultType="com.cjwstorm.bean.Goods" >
+        select
+            id,
+            category_id as categoryId,
+            item_type as itemType,
+            title,
+            sell_point as sellPoint,
+            price,
+            num,
+            barcode,
+            image,
+            status,
+            priority
+        from
+            t_goods
+        where
+            id = #{id}
+            and
+            num > 0
+            and
+            status = 1
+    </select>
+
+    <select id="findGoddsListByItemType" resultType="com.cjwstorm.bean.Goods" >
+        select
+            id,
+            title
+        from
+            t_goods
+        where
+            item_type = #{itemType} and num > 0 and status = 1
+    </select>
+</mapper>

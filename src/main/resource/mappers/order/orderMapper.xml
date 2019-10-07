@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.cjwstorm.mapper.OrderMapper">
+    <insert id="addOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into t_order
+            (
+            id,
+            uid,
+            receiver,
+            recv_district_province,
+            recv_district_city,
+            recv_district_area,
+            recv_addr,
+            recv_phone,
+            recv_tel,
+            recv_zip,
+            order_status,
+            total_price
+            )
+        values
+            (
+            #{id},
+            #{uid},
+            #{receiver},
+            #{recvDistrictProvince},
+            #{recvDistrictCity},
+            #{recvDistrictArea},
+            #{recvAddr},
+            #{recvPhone},
+            #{recvTel},
+            #{recvZip},
+            #{orderStatus},
+            #{totalPrice}
+            )
+    </insert>
+
+    <insert id="addOrderGoodsDtl" useGeneratedKeys="true" keyProperty="id">
+        insert into t_order_goods_dtl
+            (
+            id,
+            order_id,
+            goods_id,
+            goods_image,
+            goods_title,
+            goods_item_type,
+            goods_price,
+            goods_count
+            )
+        values
+            (
+            #{id},
+            #{orderId},
+            #{goodsId},
+            #{goodsImage},
+            #{goodsTitle},
+            #{goodsItemType},
+            #{goodsPrice},
+            #{goodsCount}
+            )
+    </insert>
+</mapper>

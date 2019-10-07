@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.cjwstorm.mapper.GoodsCategoryMapper">
+    <select id="findGoodsCategoryListByParentId" resultType="com.cjwstorm.bean.GoodsCategory">
+        select
+            id,
+            parent_id as parentId,
+            name,
+            status,
+            sort_order as sortOrder,
+            is_parent as isParent
+        from
+            t_goods_category
+        where
+        parent_id = #{parentId}
+        limit
+            0,#{count}
+    </select>
+</mapper>

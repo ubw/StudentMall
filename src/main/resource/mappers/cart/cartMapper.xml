@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.cjwstorm.mapper.CartMapper">
+    <insert id="add" parameterType="com.cjwstorm.bean.Cart" useGeneratedKeys="true" keyProperty="id">
+        insert into
+            t_shopping_cart
+        (
+        id,
+        uid,
+        goods_id,
+        goods_image,
+        goods_title,
+        goods_item_type,
+        goods_price,
+        goods_count
+        )
+        VALUES
+        (
+        #{id},
+        #{uid},
+        #{goodsId},
+        #{goodsImage},
+        #{goodsTitle},
+        #{goodsItemType},
+        #{goodsPrice},
+        #{goodsCount}
+        )
+    </insert>
+
+    <update id="updateNumber">
+        update
+            t_shopping_cart
+        set
+            goods_count =goods_count+#{adjustNumber}
+        where
+            uid = #{uid} and goods_id = #{goodsId}
+    </update>
+
+    <select id="findNumber" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            t_shopping_cart
+        where
+            uid = #{uid} and goods_id = #{goodsId}
+    </select>
+
+    <select id="findCartList" resultType="com.cjwstorm.bean.Cart">
+        select
+            id,
+            uid,
+            goods_id as goodsId,
+            goods_image as goodsImage,
+            goods_title as goodsTitle,
+            goods_item_type as goodsItemType,
+            goods_price as goodsPrice,
+            goods_count as goodsCount
+        from
+            t_shopping_cart
+        where
+            uid = #{uid}
+    </select>
+
+    <select id="findCartListByUidAndGoodsIds" resultType="com.cjwstorm.bean.Cart" parameterType="java.util.List">
+        select
+        id,
+        uid,
+        goods_id as goodsId,
+        goods_image as goodsImage,
+        goods_title as goodsTitle,
+        goods_item_type as goodsItemType,
+        goods_price as goodsPrice,
+        goods_count as goodsCount
+        from
+        t_shopping_cart
+        where
+        uid = #{uid}
+        and
+        goods_id in
+        <foreach item="goodsIds" index="index" collection="goodsIds" open="(" separator="," close=")">
+            #{goodsIds}
+        </foreach>
+    </select>
+</mapper>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.cjwstorm.mapper.AddressMapper">
+    <insert id="insertAddress" parameterType="com.cjwstorm.bean.Address" useGeneratedKeys="true" keyProperty="id">
+        insert into tbl_cdhd_address_inf
+         (id,
+        uid,
+        receiver,
+        recv_province,
+        recv_city,
+        recv_area,
+        recv_district_province,
+        recv_district_city,
+        recv_district_area,
+        recv_addr,
+        recv_phone,
+        recv_tel,
+        recv_zip,
+        recv_tag,
+        create_user,
+        modify_user)
+        values
+        (
+        #{id},
+        #{uid},
+        #{recvName},
+        #{recvProvince},
+        #{recvCity},
+        #{recvArea},
+        #{recvDistrictProvince},
+        #{recvDistrictCity},
+        #{recvDistrictArea},
+        #{recvAddr},
+        #{recvPhone},
+        #{recvTel},
+        #{recvZip},
+        #{recvTag},
+        #{createdUser},
+        #{modifiedUser}
+        )
+    </insert>
+
+    <!--增加根据默认地址和id排序-->
+    <select id="getAddressByUid"  resultType="com.cjwstorm.bean.Address">
+        select
+        id,
+        uid,
+        receiver as recvName,
+        recv_province as recvProvince,
+        recv_city as recvCity,
+        recv_area as recvArea,
+        recv_district_province as recvDistrictProvince,
+        recv_district_city as recvDistrictCity,
+        recv_district_area as recvDistrictArea,
+        recv_addr as recvAddr,
+        recv_phone as recvPhone,
+        recv_tel as recvTel,
+        recv_zip as recvZip,
+        recv_tag as recvTag,
+        default_address as defaultAddress
+        from
+            tbl_cdhd_address_inf
+        where
+            uid = #{uid}
+        order by
+            default_address desc, id asc
+    </select>
+
+    <delete id="delete">
+        delete from tbl_cdhd_address_inf where id=#{id} and uid=#{uid}
+    </delete>
+
+    <update id="updateAddress" parameterType="com.cjwstorm.bean.Address">
+        update
+        tbl_cdhd_address_inf
+        set
+        receiver = #{recvName},
+        recv_province = #{recvProvince},
+        recv_city = #{recvCity},
+        recv_area = #{recvArea},
+        recv_district_province = #{recvDistrictProvince},
+        recv_district_city = #{recvDistrictCity},
+        recv_district_area = #{recvDistrictArea},
+        recv_addr = #{recvAddr},
+        recv_phone = #{recvPhone},
+        recv_tel = #{recvTel},
+        recv_zip = #{recvZip},
+        recv_tag = #{recvTag}
+        where
+        id=#{id} and uid=#{uid}
+    </update>
+
+    <select id="getAddressByIdAndUid"  resultType="com.cjwstorm.bean.Address">
+        select
+        receiver as recvName,
+        recv_province as recvProvince,
+        recv_city as recvCity,
+        recv_area as recvArea,
+        recv_district_province as recvDistrictProvince,
+        recv_district_city as recvDistrictCity,
+        recv_district_area as recvDistrictArea,
+        recv_addr as recvAddr,
+        recv_phone as recvPhone,
+        recv_tel as recvTel,
+        recv_zip as recvZip,
+        recv_tag as recvTag
+        from
+        tbl_cdhd_address_inf
+        where
+        uid = #{uid}
+        and
+        id = #{id}
+    </select>
+
+    <!--设置默认地址或非默认地址,配置不能用双斜杠-->
+    <update id="setDefaultAddressOrCancel">
+        update
+            tbl_cdhd_address_inf
+        set
+            default_address = #{defaultFlag}
+        <where>
+            <if test="uid!=null">uid=#{uid}</if>
+            <if test="id!=null">and id=#{id}</if>
+        </where>
+    </update>
+</mapper>
